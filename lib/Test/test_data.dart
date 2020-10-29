@@ -1,8 +1,8 @@
 import 'package:zackie_snacks/models/ingredient.dart';
 import 'package:zackie_snacks/models/instruction.dart';
-import 'package:zackie_snacks/models/recipe_model.dart';
+import 'package:zackie_snacks/models/recipe.dart';
 
-const DUMMY_RECIPES = [
+final DUMMY_RECIPES = [
   Recipe(
     id: 1,
     name: "Test Recipe 1",

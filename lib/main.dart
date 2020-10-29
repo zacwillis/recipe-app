@@ -18,8 +18,12 @@ class MyApp extends StatelessWidget {
       title: 'Zackie Snacks',
       theme: ThemeData(
         fontFamily: 'Lato',
-        primarySwatch: Colors.lightBlue,
+        primaryColor: Colors.orangeAccent[700],
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
+              headline6: TextStyle(color: Colors.white, fontSize: 26)),
+        ),
       ),
       home: AllRecipesScreen(),
       // initialRoute: Routes.home,
