@@ -12,6 +12,26 @@ class RecipeDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(recipe.name),
+        centerTitle: true,
+        actions: <Widget>[
+          recipe.isFavorite == false
+              ? IconButton(
+                  padding: EdgeInsets.only(right: 15),
+                  icon: Icon(
+                    Icons.favorite_border,
+                    size: 28,
+                  ),
+                  onPressed: () {},
+                )
+              : IconButton(
+                  padding: EdgeInsets.only(right: 15),
+                  icon: Icon(
+                    Icons.favorite,
+                    size: 28,
+                  ),
+                  onPressed: () {},
+                ),
+        ],
       ),
     );
   }

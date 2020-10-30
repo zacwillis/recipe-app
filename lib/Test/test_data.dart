@@ -21,6 +21,7 @@ final DUMMY_RECIPES = [
     ],
     imageUrl:
         "https://assets.epicurious.com/photos/57c5c6d9cf9e9ad43de2d96e/master/pass/the-ultimate-hamburger.jpg",
+    isFavorite: true,
   ),
   Recipe(
     id: 2,
