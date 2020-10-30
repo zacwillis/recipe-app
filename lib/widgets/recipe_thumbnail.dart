@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zackie_snacks/models/recipe.dart';
 import 'package:zackie_snacks/screens/routes.dart';
 
@@ -6,7 +7,6 @@ class RecipeThumbnail extends StatelessWidget {
   final Recipe recipe;
 
   RecipeThumbnail(this.recipe);
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,12 +24,12 @@ class RecipeThumbnail extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed(Routes.recipeDetail,
-                    arguments: recipe.id.toString());
+                Navigator.of(context)
+                    .pushNamed(Routes.recipeDetail, arguments: recipe);
               },
               child: Image.network(
                 recipe.imageUrl,
-                height: 128,
+                height: 127,
                 fit: BoxFit.cover,
               ),
             ),
@@ -40,11 +40,23 @@ class RecipeThumbnail extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
                       recipe.name,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 20),
                     ),
+                    // IconButton(
+                    //   icon: Icon(
+                    //     recipe.isFavorite == false
+                    //         ? Icons.favorite_border
+                    //         : Icons.favorite,
+                    //     size: 24,
+                    //   ),
+                    //   onPressed: () {
+                    //     recipe.toggleFavoriteStatus();
+                    //   },
+                    // ),
                   ],
                 ),
               ],

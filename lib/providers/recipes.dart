@@ -9,6 +9,10 @@ class Recipes with ChangeNotifier {
     return [..._recipes];
   }
 
+  List<Recipe> get favoriteRecipes {
+    return _recipes.where((element) => element.isFavorite).toList();
+  }
+
   Recipe findById(String id) {
     return _recipes.firstWhere((rp) => rp.id.toString() == id);
   }

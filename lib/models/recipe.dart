@@ -1,5 +1,6 @@
-import 'ingredient.dart';
-import 'instruction.dart';
+import 'package:flutter/material.dart';
+import 'package:zackie_snacks/models/ingredient.dart';
+import 'package:zackie_snacks/models/instruction.dart';
 
 class Recipe {
   final int id;
@@ -16,4 +17,9 @@ class Recipe {
       this.instructions,
       this.imageUrl,
       this.isFavorite = false});
+
+  // void toggleFavoriteStatus() {
+  //   isFavorite = !isFavorite;
+  //   notifyListeners();
+  // }
 }
