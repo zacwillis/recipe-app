@@ -1,4 +1,5 @@
 class Routes {
-  static const recipeScreen = '/recipes';
-  static const home = recipeScreen;
+  static const allRecipes = '/recipes';
+  static const recipeDetail = '/recipe-detail';
+  // static const home = recipeScreen;
 }

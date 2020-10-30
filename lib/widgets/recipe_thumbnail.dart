@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:zackie_snacks/models/recipe.dart';
+import 'package:zackie_snacks/screens/routes.dart';
 
 class RecipeThumbnail extends StatelessWidget {
-  final int id;
-  final String name;
-  final String imageUrl;
+  final Recipe recipe;
 
-  RecipeThumbnail(this.id, this.name, this.imageUrl);
+  RecipeThumbnail(this.recipe);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +22,16 @@ class RecipeThumbnail extends StatelessWidget {
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
-            child: Image.network(
-              imageUrl,
-              height: 128,
-              fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(Routes.recipeDetail,
+                    arguments: recipe.id.toString());
+              },
+              child: Image.network(
+                recipe.imageUrl,
+                height: 128,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Padding(
@@ -36,7 +42,7 @@ class RecipeThumbnail extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Text(
-                      name,
+                      recipe.name,
                       style: TextStyle(fontSize: 18),
                     ),
                   ],
@@ -47,15 +53,5 @@ class RecipeThumbnail extends StatelessWidget {
         ],
       ),
     );
-
-    // ClipRRect(
-    //   borderRadius: BorderRadius.circular(10),
-    //   child: GridTile(
-    //     child: Image.network(
-    //       imageUrl,
-    //       fit: BoxFit.cover,
-    //     ),
-    //   ),
-    // );
   }
 }

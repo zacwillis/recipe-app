@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:zackie_snacks/screens/all_recipes_screen.dart';
-
+import 'package:zackie_snacks/screens/recipe_detail_screen.dart';
+import './providers/recipes.dart';
 import 'screens/routes.dart';
 
 void main() {
@@ -13,23 +15,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Zackie Snacks',
-      theme: ThemeData(
-        fontFamily: 'Lato',
-        primaryColor: Colors.orangeAccent[700],
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
-          textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.white, fontSize: 26)),
+    return ChangeNotifierProvider(
+      create: (context) => Recipes(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Zackie Snacks',
+        theme: ThemeData(
+          fontFamily: 'Lato',
+          primaryColor: Colors.orangeAccent[700],
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          appBarTheme: AppBarTheme(
+            textTheme: TextTheme(
+                headline6: TextStyle(color: Colors.white, fontSize: 26)),
+          ),
         ),
+        home: AllRecipesScreen(),
+        routes: {
+          Routes.recipeDetail: (context) => RecipeDetailScreen(),
+        },
       ),
-      home: AllRecipesScreen(),
-      // initialRoute: Routes.home,
-      // routes: {
-      //   Routes.recipeScreen: (context) => AllRecipesScreen(),
-      // },
     );
   }
 }
