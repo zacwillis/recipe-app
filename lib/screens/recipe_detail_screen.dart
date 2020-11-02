@@ -1,9 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:zackie_snacks/models/recipe.dart';
-import 'package:zackie_snacks/providers/recipes.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
+  @override
+  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+}
+
+Widget buildHeading(String heading) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 10),
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            heading,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildList(Recipe recipe, String listType) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: listType == "ingredients"
+        ? recipe.ingredients.map((ing) {
+            return Container(
+              margin: EdgeInsets.only(left: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "• ${ing.name} - ${ing.quantity}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList()
+        : recipe.instructions.map((inst) {
+            return Container(
+              margin: EdgeInsets.only(left: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "${inst.step}.  ${inst.description}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+  );
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final recipe = ModalRoute.of(context).settings.arguments as Recipe;
@@ -22,8 +84,32 @@ class RecipeDetailScreen extends StatelessWidget {
                     : Icons.favorite_border,
                 size: 30,
               ),
-              onPressed: () {})
+              onPressed: () {
+                setState(() {
+                  recipe.isFavorite = !recipe.isFavorite;
+                });
+              })
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 10),
+              height: 225,
+              width: double.infinity,
+              child: Image.network(
+                recipe.imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            buildHeading("Ingredients"),
+            buildList(recipe, "ingredients"),
+            SizedBox(height: 25),
+            buildHeading("Instructions"),
+            buildList(recipe, "instructions"),
+          ],
+        ),
       ),
     );
   }
