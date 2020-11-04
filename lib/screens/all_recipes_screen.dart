@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:zackie_snacks/providers/recipes.dart';
 import 'package:zackie_snacks/widgets/recipe_thumbnail.dart';
 
+import 'routes.dart';
+
 enum FilterOptions {
   Favorites,
   All,
@@ -18,6 +20,13 @@ class _AllRecipesScreenState extends State<AllRecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.addNewRecipe);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.orangeAccent[700],
+      ),
       appBar: AppBar(
         title: Text("Recipes"),
         actions: <Widget>[
@@ -42,7 +51,8 @@ class _AllRecipesScreenState extends State<AllRecipesScreen> {
               ),
             ],
             icon: Icon(
-              Icons.more_vert,
+              Icons.filter_alt_outlined,
+              size: 32,
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zackie_snacks/models/recipe.dart';
+import 'package:zackie_snacks/screens/routes.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
   @override
@@ -72,23 +73,41 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     // final recipe = Provider.of<Recipe>(context, listen: false)
     //     .findById(recipeId.toString());
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.editRecipe);
+        },
+        child: Icon(Icons.edit_outlined),
+        backgroundColor: Colors.orangeAccent[700],
+      ),
       appBar: AppBar(
         title: Text(recipe.name),
         centerTitle: true,
         actions: [
-          IconButton(
-              padding: EdgeInsets.only(right: 15),
-              icon: Icon(
-                recipe.isFavorite == true
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                size: 30,
-              ),
-              onPressed: () {
-                setState(() {
-                  recipe.isFavorite = !recipe.isFavorite;
+          Builder(builder: (BuildContext context) {
+            return IconButton(
+                padding: EdgeInsets.only(right: 15),
+                icon: Icon(
+                  recipe.isFavorite == true
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  size: 30,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).hideCurrentSnackBar();
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(recipe.isFavorite
+                          ? "Recipe removed from favorites"
+                          : "Recipe added to favorites"),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                  setState(() {
+                    recipe.isFavorite = !recipe.isFavorite;
+                  });
                 });
-              })
+          })
         ],
       ),
       body: SingleChildScrollView(
