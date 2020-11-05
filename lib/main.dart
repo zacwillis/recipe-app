@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         home: AllRecipesScreen(),
         routes: {
+          Routes.allRecipes: (context) => AllRecipesScreen(),
           Routes.recipeDetail: (context) => RecipeDetailScreen(),
           Routes.addNewRecipe: (context) => NewRecipeScreen(),
           Routes.editRecipe: (context) => EditRecipeScreen(),

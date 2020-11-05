@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zackie_snacks/models/recipe.dart';
+import 'package:zackie_snacks/providers/recipes.dart';
 
 class NewRecipeScreen extends StatefulWidget {
   @override
@@ -7,11 +10,19 @@ class NewRecipeScreen extends StatefulWidget {
 
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
   final _imageUrlController = TextEditingController();
   List<Widget> _ingredients = List<Widget>();
   List<Widget> _instructions = List<Widget>();
   List<Widget> _list = List<Widget>();
   var _type = "";
+  var _newRecipe = Recipe(
+      id: null,
+      name: '',
+      ingredients: [],
+      instructions: [],
+      imageUrl: '',
+      isFavorite: null);
 
   @override
   void dispose() {
@@ -33,14 +44,31 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Form(
+          key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 TextFormField(
+                  onSaved: (value) {
+                    _newRecipe = Recipe(
+                      id: null,
+                      name: value,
+                      ingredients: _newRecipe.ingredients,
+                      instructions: _newRecipe.instructions,
+                      isFavorite: _newRecipe.isFavorite,
+                    );
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Please add a recipe name.";
+                    } else {
+                      return null;
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: "Recipe Name",
                   ),
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30.0),
@@ -104,6 +132,30 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                       ),
                       Expanded(
                         child: TextFormField(
+                          onSaved: (value) {
+                            _newRecipe = Recipe(
+                              id: null,
+                              name: _newRecipe.name,
+                              ingredients: _newRecipe.ingredients,
+                              instructions: _newRecipe.instructions,
+                              imageUrl: value,
+                            );
+                          },
+                          validator: (value) {
+                            if (!value.startsWith('http') &&
+                                !value.startsWith('https')) {
+                              return "Please enter a valid url.";
+                            }
+                            if (!value.endsWith('.png') &&
+                                !value.endsWith(".jpg") &&
+                                !value.endsWith(".jpeg") &&
+                                !value.endsWith(".JPG") &&
+                                !value.endsWith(".JPEG") &&
+                                !value.endsWith(".PNG")) {
+                              return "Please enter a valid image url.";
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(labelText: 'Image URL'),
                           keyboardType: TextInputType.url,
                           textInputAction: TextInputAction.done,
@@ -114,6 +166,31 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           },
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RaisedButton(
+                        onPressed: () {
+                          final isValid = _formKey.currentState.validate();
+                          if (!isValid) {
+                            return;
+                          }
+                          _formKey.currentState.save();
+                          Provider.of<Recipes>(context, listen: false)
+                              .addRecipe(_newRecipe);
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.green,
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -175,9 +252,6 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 }
 
 class IngInputWidget extends StatelessWidget {
-  // String fieldName;
-  // InputWidget({this.fieldName = ''});
-
   @override
   Widget build(BuildContext context) {
     return Padding(

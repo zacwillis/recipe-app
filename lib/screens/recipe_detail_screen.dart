@@ -75,7 +75,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, Routes.editRecipe);
+          Navigator.pushNamed(context, Routes.editRecipe, arguments: recipe);
         },
         child: Icon(Icons.edit_outlined),
         backgroundColor: Colors.orangeAccent[700],
