@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zackie_snacks/models/ingredient.dart';
+import 'package:zackie_snacks/models/instruction.dart';
 import 'package:zackie_snacks/models/recipe.dart';
 import 'package:zackie_snacks/providers/recipes.dart';
 
@@ -12,9 +14,9 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final _imageUrlController = TextEditingController();
-  List<Widget> _ingredients = List<Widget>();
-  List<Widget> _instructions = List<Widget>();
-  List<Widget> _list = List<Widget>();
+  List<Widget> _ingWidget = List<Widget>();
+  List<Widget> _instWidget = List<Widget>();
+  List<Widget> _widgetList = List<Widget>();
   var _type = "";
   var _newRecipe = Recipe(
       id: null,
@@ -34,7 +36,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: _openDrawer(_type, _list),
+      endDrawer: _openDrawer(_type, _widgetList),
       appBar: AppBar(
         actions: <Widget>[
           new Container(),
@@ -80,7 +82,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           width: 1.0, color: Theme.of(context).primaryColor),
                       onPressed: () {
                         setState(() {
-                          _list = _ingredients;
+                          _widgetList = _ingWidget;
                           _type = "Ingredients";
                           _scaffoldKey.currentState.openEndDrawer();
                         });
@@ -102,7 +104,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           width: 1.0, color: Theme.of(context).primaryColor),
                       onPressed: () {
                         setState(() {
-                          _list = _instructions;
+                          _widgetList = _instWidget;
                           _type = "Instructions";
                           _scaffoldKey.currentState.openEndDrawer();
                         });
@@ -202,6 +204,19 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     );
   }
 
+  void addIng(Map ingredient) {
+    Ingredient _newIngredient =
+        Ingredient(name: ingredient['name'], quantity: ingredient["qty"]);
+    _newRecipe.ingredients.add(_newIngredient);
+  }
+
+  void addInst(Map instruction) {
+    Instruction _newInstruction = Instruction(
+        step: int.parse(instruction['step']),
+        description: instruction["description"]);
+    _newRecipe.instructions.add(_newInstruction);
+  }
+
   Widget _openDrawer(String type, List<Widget> _listType) {
     return Drawer(
       child: SingleChildScrollView(
@@ -224,8 +239,8 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                       onPressed: () {
                         setState(() {
                           _listType.add(type == "Ingredients"
-                              ? IngInputWidget()
-                              : InstInputWidget());
+                              ? IngInputWidget(addIng)
+                              : InstInputWidget(addInst));
                         });
                       },
                       icon: Icon(Icons.add),
@@ -244,6 +259,23 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                 return _listType[i];
               }),
             ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  RaisedButton(
+                    color: Colors.green,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Done",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -252,42 +284,66 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 }
 
 class IngInputWidget extends StatelessWidget {
+  final Function ingHandler;
+  IngInputWidget(this.ingHandler);
+
+  final _ingController = TextEditingController();
+  final _qtyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Form(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: 160,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Ingredient",
-                  border: OutlineInputBorder(),
-                ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: 160,
+            child: TextFormField(
+              controller: _ingController,
+              decoration: InputDecoration(
+                labelText: "Ingredient",
+                border: OutlineInputBorder(),
               ),
             ),
-            Container(
-              width: 80,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: "QTY",
-                  border: OutlineInputBorder(),
-                ),
+          ),
+          Container(
+            width: 80,
+            child: TextFormField(
+              controller: _qtyController,
+              textInputAction: TextInputAction.done,
+              onEditingComplete: () {
+                if (_ingController.text.isNotEmpty) {
+                  ingHandler({
+                    'name': _ingController.text,
+                    'qty': _qtyController.text
+                  });
+                  node.unfocus();
+                  _ingController.text = null;
+                  _qtyController.text = null;
+                }
+              },
+              decoration: InputDecoration(
+                labelText: "QTY",
+                border: OutlineInputBorder(),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class InstInputWidget extends StatelessWidget {
+  final Function instHandler;
+  InstInputWidget(this.instHandler);
+
+  final _stepController = TextEditingController();
+  final _descController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Form(
@@ -297,6 +353,7 @@ class InstInputWidget extends StatelessWidget {
             Container(
               width: 50,
               child: TextFormField(
+                controller: _stepController,
                 decoration: InputDecoration(
                   labelText: "Step",
                   border: OutlineInputBorder(),
@@ -306,8 +363,21 @@ class InstInputWidget extends StatelessWidget {
             Container(
               width: 170,
               child: TextFormField(
+                controller: _descController,
+                textInputAction: TextInputAction.done,
                 maxLines: 4,
                 minLines: 1,
+                onEditingComplete: () {
+                  if (_descController.text.isNotEmpty) {
+                    instHandler({
+                      'step': _stepController.text,
+                      'description': _descController.text
+                    });
+                    node.unfocus();
+                    _descController.text = null;
+                    _stepController.text = null;
+                  }
+                },
                 decoration: InputDecoration(
                   labelText: "Instruction",
                   border: OutlineInputBorder(),

@@ -53,9 +53,41 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
               Icons.delete_forever,
               color: Colors.white,
             ),
-            onPressed: null,
-            iconSize: 30,
-          )
+            onPressed: () {
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Delete Recipe?'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text('Are you sure you want to delete this recipe?'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Delete'),
+                        onPressed: () {
+                          Provider.of<Recipes>(context, listen: false)
+                              .deleteRecipe(_editedRecipe.id);
+                          Navigator.of(context).pushNamed(Routes.allRecipes);
+                        },
+                      ),
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ],
         title: Text("Edit Recipe"),
       ),

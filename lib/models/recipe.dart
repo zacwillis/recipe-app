@@ -3,11 +3,11 @@ import 'package:zackie_snacks/models/ingredient.dart';
 import 'package:zackie_snacks/models/instruction.dart';
 
 class Recipe {
-  final int id;
-  final String name;
-  final List<Ingredient> ingredients;
-  final List<Instruction> instructions;
-  final String imageUrl;
+  String id;
+  String name;
+  List<Ingredient> ingredients;
+  List<Instruction> instructions;
+  String imageUrl;
   bool isFavorite;
 
   Recipe(

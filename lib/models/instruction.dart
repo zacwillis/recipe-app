@@ -1,8 +1,8 @@
 class Instruction {
-  final int id;
-  final int recipeId;
-  final int step;
-  final String description;
+  String id;
+  String recipeId;
+  int step;
+  String description;
 
-  const Instruction({this.id, this.recipeId, this.step, this.description});
+  Instruction({this.id, this.recipeId, this.step, this.description});
 }

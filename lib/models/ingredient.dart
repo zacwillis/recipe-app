@@ -1,8 +1,15 @@
 class Ingredient {
-  final int id;
-  final int recipeId;
-  final String name;
-  final String quantity;
+  String id;
+  String recipeId;
+  String name;
+  String quantity;
 
-  const Ingredient({this.id, this.recipeId, this.name, this.quantity});
+  Ingredient({this.id, this.recipeId, this.name, this.quantity});
+
+  // Ingredient.fromJson(Map<String, dynamic> jsonData) {
+  //   id = jsonData["id"];
+  //   recipeId = jsonData["recipeId"];
+  //   name = jsonData["name"];
+  //   quantity = jsonData["quantity"];
+  // }
 }
