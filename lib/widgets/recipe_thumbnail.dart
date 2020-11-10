@@ -30,6 +30,7 @@ class RecipeThumbnail extends StatelessWidget {
               child: Image.network(
                 recipe.imageUrl,
                 height: 127,
+                width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
