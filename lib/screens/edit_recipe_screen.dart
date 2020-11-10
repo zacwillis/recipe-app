@@ -270,32 +270,43 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                  children: list.map((item) {
-                return Container(
-                  margin: EdgeInsets.only(left: 50),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      type == "Ingredients"
-                          ? Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                "• ${item.name} - ${item.quantity}",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                "• ${item.step} - ${item.description}",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                    ],
-                  ),
-                );
-              }).toList()),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                    children: list.map((item) {
+                  return Container(
+                    margin: EdgeInsets.only(left: 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        type == "Ingredients"
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "• ${item.name} - ",
+                                      style: TextStyle(fontSize: 22),
+                                    ),
+                                    Text(
+                                      "${item.quantity}",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Text(
+                                  "${item.step}. ${item.description}",
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                              )
+                      ],
+                    ),
+                  );
+                }).toList()),
+              ),
             ),
           )
         ],

@@ -6,10 +6,11 @@ class Ingredient {
 
   Ingredient({this.id, this.recipeId, this.name, this.quantity});
 
-  // Ingredient.fromJson(Map<String, dynamic> jsonData) {
-  //   id = jsonData["id"];
-  //   recipeId = jsonData["recipeId"];
-  //   name = jsonData["name"];
-  //   quantity = jsonData["quantity"];
-  // }
+  Map<String, dynamic> toJson() {
+    return {
+      "name": this.name,
+      "quantity": this.quantity,
+      "recipeId": this.recipeId
+    };
+  }
 }
