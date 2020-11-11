@@ -19,21 +19,20 @@ class Recipes with ChangeNotifier {
     return _recipes.firstWhere((rp) => rp.id.toString() == id);
   }
 
-  void addRecipe(Recipe recipe) {
-    const url = 'https://zackie-snacks-cf721.firebaseio.com/recipes.json';
-    http
-        .post(
-      url,
-      body: json.encode(
-        {
-          'name': recipe.name,
-          'imageUrl': recipe.imageUrl,
-          'ingredients': recipe.ingredients,
-          'instructions': recipe.instructions
-        },
-      ),
-    )
-        .then((response) {
+  Future addRecipe(Recipe recipe) async {
+    const url = 'https://zackie-snacks-cf721.firebaseio.com/recipes';
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'name': recipe.name,
+            'imageUrl': recipe.imageUrl,
+            'ingredients': recipe.ingredients,
+            'instructions': recipe.instructions
+          },
+        ),
+      );
       final newRecipe = Recipe(
         id: json.decode(response.body)['name'],
         name: recipe.name,
@@ -44,7 +43,9 @@ class Recipes with ChangeNotifier {
       );
       _recipes.add(newRecipe);
       notifyListeners();
-    });
+    } catch (error) {
+      throw error;
+    }
   }
 
   // void addIngredient(String recipeId, List<Ingredient> ingredients) {

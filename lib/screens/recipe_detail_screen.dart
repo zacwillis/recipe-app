@@ -38,7 +38,7 @@ Widget buildList(Recipe recipe, String listType) {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "• ${ing.name} - ${ing.quantity}",
+                      "•  ${ing.name} - ${ing.quantity}",
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
